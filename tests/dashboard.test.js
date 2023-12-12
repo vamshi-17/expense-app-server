@@ -49,7 +49,6 @@ describe('Testing Dashboard Controller', () => {
         amount: 4567,
         __v: 0,
       },
-      // We can add more budget mock data as needed
     ];
 
     // Mock the aggregate and find functions of the expense and budget models
