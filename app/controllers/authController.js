@@ -9,10 +9,10 @@ const register= async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    // Check if the username or email already exists
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Username or email already exists' });
+    // Verify uniqueness of username and email
+    const userExists = await User.findOne({ $or: [{ username }, { email }] });
+    if (userExists) {
+      return res.status(400).json({ message: 'Username or email already in use.' });
     }
 
     // Create a new user
@@ -36,7 +36,7 @@ const login =async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Find the user by username
+    // Retrieve user by username
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(401).json({ message: 'Invalid username or password' });

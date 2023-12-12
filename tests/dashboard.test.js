@@ -2,38 +2,40 @@ const request = require('supertest');
 const app = require('../index.js'); // Assuming this is the correct path to your app entry point
 NODE_ENV='test'
 
+// Mocking models
 jest.mock('../app/models/expense');
 jest.mock('../app/models/budget');
 
 let authToken; // Variable to store the authentication token
 
-describe('Dashboard Controller', () => {
+describe('Testing Dashboard Controller', () => {
   beforeAll(async () => {
-    // Simulate authentication and obtain a token
-    const loginResponse = await request(app)
+    // Getting an auth token for testing
+    const authResponse = await request(app)
       .post('/v1/auth/login')
       .send({
-        username: 'vikasraria14',
-        password: 'Raria@123',
+        username: 'user12',
+        password: 'user12',
       });
 
-    expect(loginResponse.status).toBe(200);
-    expect(loginResponse.body.token).toBeDefined();
-    authToken = loginResponse.body.token; // Store the token for later use
+    expect(authResponse.status).toBe(200);
+    expect(authResponse.body.token).toBeDefined();
+    testAuthToken = authResponse.body.token; // Storing the token for later use
   });
 
-  it('should return budget vs expenses data', async () => {
+  it('should retrieve budget and expenses comparison data', async () => {
     // Check if authToken is defined
-    if (!authToken) {
-      throw new Error('Authentication token is not defined. Make sure to run the authentication test first.');
+    if (!testAuthToken) {
+      throw new Error('Auth token missing. Required for test execution.');
     }
 
+    // Mock data for expenses
     const expenseMockData = [
       {
-        _id: '6568e283b8bdfbff22eecf59',
-        description: 'Computer Made Easy',
+        _id: '657563bd64e33a9a2dc167af',
+        description: 'Programming Is Life',
         category: 'books',
-        amount: 23456,
+        amount: 1000,
         month: 12,
         year: 2023,
         __v: 0,
@@ -42,24 +44,25 @@ describe('Dashboard Controller', () => {
 
     const budgetMockData = [
       {
-        _id: '6568e28db8bdfbff22eecf5e',
+        _id: '657629b9cbcb7308737fd99b',
         category: 'books',
         amount: 4567,
         __v: 0,
       },
-      // Add more budget mock data as needed
+      // We can add more budget mock data as needed
     ];
 
     // Mock the aggregate and find functions of the expense and budget models
     require('../app/models/expense').find.mockResolvedValue(expenseMockData);
     require('../app/models/budget').find.mockResolvedValue(budgetMockData);
 
-    const response = await request(app)
+    // Making a request to the endpoint with the test token
+    const dashboardResponse = await request(app)
       .get('/v1/dashboard/budgetVSExpenses?month=12&year=2023')
-      .set('x-auth-token', `${authToken}`); // Include the authentication token
+      .set('x-auth-token', `${testAuthToken}`); // Include the authentication token
 
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(
+    expect(dashboardResponse.status).toBe(200);
+    expect(dashboardResponse.body).toEqual(
       expect.arrayContaining([
         {
           category: expect.any(String),

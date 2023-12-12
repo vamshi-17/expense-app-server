@@ -1,6 +1,6 @@
 const express = require('express');
 const checkTokenExpiration = require('../middlewares/auth');
-const budgetController = require('../controllers/budget.controller');
+const budgetController = require('../controllers/defaultBudgetController.js');
 
 const router = express.Router();
 

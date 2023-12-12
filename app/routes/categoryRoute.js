@@ -1,6 +1,6 @@
 const express = require('express');
 const checkTokenExpiration = require('../middlewares/auth');
-const categoryController = require('../controllers/category.controller.js');
+const categoryController = require('../controllers/categoryController.js');
 
 const router = express.Router();
 

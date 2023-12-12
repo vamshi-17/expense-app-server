@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('../../configs/config.json')
 
-// Middleware to check for token expiration
+// Middleware to check for token expiration and validity
 const checkTokenExpiration = (req, res, next) => {
   const token = req.header('x-auth-token');
   if (!token) {

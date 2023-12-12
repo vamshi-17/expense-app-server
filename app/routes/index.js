@@ -1,10 +1,10 @@
 const express = require("express");
-const authRoute = require("./auth.route");
-const salaryRoute = require("./salary.route")
-const budgetRoute = require("./budget.route")
-const expensesRoute = require("./expense.route")
-const categoryRoute = require("./category.route")
-const defaultBudgetRoute = require('./defaultBudget.routes')
+const authRoute = require("./authRoute");
+const salaryRoute = require("./salaryRoute")
+const budgetRoute = require("./budgetRoute")
+const expensesRoute = require("./expenseRoute")
+const categoryRoute = require("./categoryRoute")
+const defaultBudgetRoute = require('./defaultBudgetRoutes')
 const dashboardRoute = require('./dashboard')
 const router = express.Router();
 
